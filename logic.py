@@ -150,3 +150,29 @@ def update_expense():
     cursor.commit()
 
     print(" expense updated successfully ")
+
+
+def search_by_category():
+     
+    category = input("enter the category")
+
+    query = """
+    SELECT * FROM expenses 
+    where category LIKE %s
+    """
+
+    cursor.execute(query , (category,))
+    rows = cursor.fetchall()
+
+    if len(rows) == 0:
+        print("No expenses found in this category.")
+    else:
+        print("\n--- Matching Expenses ---")
+
+        for row in rows:
+            print(f"ID: {row[0]}")
+            print(f"Date: {row[1]}")
+            print(f"Amount: {row[2]}")
+            print(f"Category: {row[3]}")
+            print(f"Description: {row[4]}")
+            print("------------------------")
