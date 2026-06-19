@@ -122,3 +122,31 @@ def view_monthly_expenses():
             print(f"Description: {row[4]}")
             print("----------------------")
 
+
+def update_expense():
+    #first we need  expense_id
+    expense_id  = int(input("enter expense id"))
+
+    new_date = input("enter date yyyy-mm-dd")
+    new_amount = float(input("enter the amount"))
+    new_category = input("enter the category")
+    new_description = input("enter the description")
+
+    query = """
+    UPDATE expenses
+    SET expense_date = %s,
+        amount = %s,
+        category = %s,
+        description = %s
+    WHERE id = %s
+    """
+
+    values = {
+         new_date , new_amount , new_category , new_description 
+    }
+
+    cursor.execute(query,values)
+
+    cursor.commit()
+
+    print(" expense updated successfully ")
