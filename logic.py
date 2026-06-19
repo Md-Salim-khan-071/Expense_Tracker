@@ -4,6 +4,7 @@ conn = mysql.connector.connect(
     host="localhost",
     user="root",
     password="Salimk@SQL28",      # Replace with your MySQL password
+
     database="expense_tracker"
 )
 
