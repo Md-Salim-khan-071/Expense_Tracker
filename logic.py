@@ -212,3 +212,46 @@ def export_to_excel():
     workbook.save("expenses.xlsx")
     
     print("Expenses exported successfully!")
+
+def category_wise_total():
+
+
+    query = """
+    SELECT category,SUM(amount)
+    FROM expenses GROUP BY category
+    """
+    cursor.execute(query)
+    
+    rows = cursor.fetchall()
+
+    if len( rows ) == 0:
+        print("no expenses found")
+    else:
+        for row in rows:
+            print(f"category: {row[0]}")
+            print(f"total: {row[1]}")
+
+
+def filter_by_date_range():
+    start_date = input("enter the start date yyyy-mm-dd")
+    end_date = input("enter the ending date yyyy-mm-dd")
+
+    query = """
+    SELECT * FROM 
+    expenses WHERE expense_date BETWEEN %s and %s
+    """
+
+    cursor.execute(query,(start_date,end_date))
+
+    rows = cursor.fetchall()
+
+    if len(rows)==0:
+        print("no expenses yet")
+    else:
+        for row in rows:
+            print(f"ID: {row[0]}")
+            print(f"Date: {row[1]}")
+            print(f"Amount: {row[2]}")
+            print(f"Category: {row[3]}")
+            print(f"Description: {row[4]}")
+            print("------------------------")
