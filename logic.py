@@ -1,10 +1,12 @@
 import mysql.connector
+#for importing in Excel(.xlss) file . we need a library called "openpyxl" using "pip install openpyxl .
+from  openpyxl import Workbook 
+
 
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
     password="Salimk@SQL28",      # Replace with your MySQL password
-
     database="expense_tracker"
 )
 
@@ -176,3 +178,37 @@ def search_by_category():
             print(f"Category: {row[3]}")
             print(f"Description: {row[4]}")
             print("------------------------")
+
+
+def export_to_excel():
+
+    # Create a new Excel workbook
+    workbook = Workbook()
+
+    # Get the active sheet
+    sheet = workbook.active
+
+    # Give the sheet a name
+    sheet.title = "Expenses"
+
+    # Add column headings
+    sheet.append(["ID", "Date", "Amount", "Category", "Description"])
+
+    # Fetch all expenses from MySQL
+    query = """
+    SELECT id, expense_date, amount, category, description
+    FROM expenses
+    """
+
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+
+    # Write each expense to Excel
+    for row in rows:
+        sheet.append(row)
+
+    # Save the workbook
+    workbook.save("expenses.xlsx")
+    
+    print("Expenses exported successfully!")
