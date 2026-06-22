@@ -1,47 +1,43 @@
 import tkinter as tk
 from tkinter import ttk
-from logic import *
+# from logic import *
 
+root = tk.Tk()
 
-# Create the main window
-root = tk.Tk()   # root is a variable name that referes to the window
+root.title("Expense tracker")
 
-# Set the window title
-root.title("Expense Tracker Dashboard")
-
-# Set the window size (Width x Height)
 root.geometry("1000x600")
 
+root.configure(bg="#F5D1D1")
 
-# creating the table to view data 
+header_frame = tk.Frame(root , bg="#2C3E50", bd=2 , relief="raised")
+header_frame.pack(padx=10,pady=10,fill='x')
 
-columns = ("ID" , "Date" , "Amount" , "Category" , "Description")
+title_lable = tk.Label(header_frame , text="Expense Tracker" , font=("helvetica",20,"bold"),bg="#2C3E50",fg="white",)
+title_lable.pack(padx=10 , pady=10)
+title_lable2 = tk.Label(header_frame , text="by Salim khan",bg="#2C3E50",fg="white")
+title_lable2.pack()
 
-table = ttk.Treeview(root , columns=columns , show="headings")
+feature_frame = tk.Frame(root , bg="#2C3E50", bd=2 , relief="raised" )
+feature_frame.pack(fill='x',padx=10)
 
-for column in columns:
-    table.heading(column, text="column")
+add_button = tk.Button(feature_frame, text="ADD➕" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white")
+add_button.pack(side="left"  , padx=10 , pady=10 )
 
-table.pack(fill="both", expand=True)
+Update_button = tk.Button(feature_frame, text="Update🖋️" , font=("helvetica",12,"bold" ) , bg="#90C0EF" , fg="white" )
+Update_button.pack(side="left" , padx=10 , pady=10 )
 
-table.insert("", "end", values=(1, "2026-03-28", 250, "Food", "Lunch"))
-table.insert("", "end", values=(1, "2026-03-28", 500, "Food", "dinner"))
+delete_button = tk.Button(feature_frame, text="Delete🗑️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" )
+delete_button.pack(side="left" , padx=10 , pady=10 )
 
+refresh_button = tk.Button(feature_frame, text="Refresh🔄️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" )
+refresh_button.pack(side="left" , padx=10 , pady=10 )
 
-# buttons 
-
-add_button = tk.Button(root , text=" + Add Expense", command=add_expenses)
-add_button.pack(pady = 10)
-
-view_button = tk.Button(root , text="View Expenses", command=view_expenses)
-view_button.pack(pady = 10)
-
-total_button = tk.Button (root , text="total expenses",command=show_total_expense) 
-total_button.pack(pady = 10)
-
-delete_button = tk.Button(root , text=" delete expenses", command=delete_expenses)
-delete_button.pack(pady = 10)
+export_button = tk.Button(feature_frame, text="Export to Excel" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white")
+export_button.pack(side="left" , padx=10 , pady=10 )
 
 
-# Start the application
+content_frame = tk.Frame(root)
+content_frame.pack(fill='both',expand=True)
+
 root.mainloop()
