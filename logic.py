@@ -255,3 +255,15 @@ def filter_by_date_range():
             print(f"Category: {row[3]}")
             print(f"Description: {row[4]}")
             print("------------------------")
+
+
+def get_all_expenses():
+    cursor.execute("""
+        SELECT id, expense_date, amount, category, description
+        FROM expenses
+    """)
+
+    rows = cursor.fetchall()
+    return rows
+
+
