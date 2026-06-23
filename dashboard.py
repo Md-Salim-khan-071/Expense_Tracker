@@ -17,6 +17,39 @@ def refresh_table():
     for row in rows:
         table.insert("","end",values=row)
 
+# function to open a new  windo when the ADD button is clicked 
+def open_add_window():
+    add_window = tk.Toplevel(root)
+
+    add_window.title("Add Expense" )
+    add_window.geometry("400x300")
+
+    # the frame in which all the entries will be there . for a more modular look 
+    add_expense_frame = tk.Frame(add_window)
+    add_expense_frame.columnconfigure(0 , weight=1)
+    add_expense_frame.columnconfigure(1 , weight=1)
+
+    date_label = tk.Label(add_expense_frame, text="Date(yyyy-mm-dd):" , font=("helvetica",12,"bold"),bg="#2C3E50",fg="white")
+    date_label.grid(row=0 , column=0)
+    date_entry = tk.Entry(add_expense_frame)
+    date_entry.grid(row=0 , column=1)
+
+    Amount_label = tk.Label(add_expense_frame, text="Amount:")
+    Amount_label.grid(row=1 , column=0)
+    Amount_entry = tk.Entry(add_expense_frame)
+    Amount_entry.grid(row=1 , column=1)
+
+    Category_label = tk.Label(add_expense_frame, text="Category:")
+    Category_label.grid(row=2 , column=0)
+    Category_entry = tk.Entry(add_expense_frame)
+    Category_entry.grid(row=2 , column=1)
+
+    Description_label = tk.Label(add_expense_frame, text="Description:")
+    Description_label.grid(row=3 , column=0)
+    Description_entry = tk.Entry(add_expense_frame)
+    Description_entry.grid(row=3 , column=1)
+
+    add_expense_frame.pack(padx=20, pady=20)
 
 
 
@@ -42,7 +75,7 @@ title_lable2.pack()
 feature_frame = tk.Frame(root , bg="#2C3E50", bd=2 , relief="raised" )
 feature_frame.pack(fill='x',padx=10,pady=10)
 
-add_button = tk.Button(feature_frame, text="ADD➕" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white")
+add_button = tk.Button(feature_frame, text="ADD➕" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" , command=open_add_window )
 add_button.pack(side="left"  , padx=10 , pady=10 )
 
 Update_button = tk.Button(feature_frame, text="Update🖋️" , font=("helvetica",12,"bold" ) , bg="#90C0EF" , fg="white" )
