@@ -4,6 +4,7 @@ from tkinter import messagebox
 import mysql.connector
 # from logic import *
 import logic
+from datetime import datetime  # for date format validation
 
 """ the dashboard specific functions """
 
@@ -67,6 +68,15 @@ def open_add_window():
         # Show an error message and don't save
             messagebox.showerror("Error","please fill all the records"
         )
+            
+        try:
+            datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            messagebox.showerror(
+                "Invalid Date",
+                "Please enter the date in YYYY-MM-DD format."
+            )
+            return    # this part is to check for date format , as mysql will only take date in (yyyy-mm-dd) format . and also this part should be before the sql querying 
 
         logic.add_expense_gui(
         date,
@@ -113,6 +123,113 @@ def delete_selected_expense():
 
     refresh_table()
 
+
+# function for the update button
+def update_selected_item():
+    selected_item  = table.selection()
+    
+    if not selected_item:
+        messagebox.showerror("ERROR!!","select a row to Update")
+        return
+    
+    values = table.item(selected_item[0],"values")
+
+    #now we have selected the values . but to update them we need to store them in variables
+    expense_id = values[0]
+    date = values[1]
+    amount = values[2]
+    category = values[3]
+    description = values[4]
+
+    update_window = tk.Toplevel(root)
+    update_window.title("update the values")
+    
+    # NOW after creating the window , we do exactly as the add window , but we also  show the existing values .
+    
+    update_expense_frame = tk.Frame(update_window)
+    update_expense_frame.columnconfigure(0 , weight=1)
+    update_expense_frame.columnconfigure(1 , weight=1)
+
+    ID_label = tk.Label(update_expense_frame, text="Expense ID:" )
+    ID_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    ID_entry = tk.Entry(update_expense_frame)
+    ID_entry.grid(row=0 , column=1)
+    ID_entry.insert(0,expense_id)
+    ID_entry.config(state="readonly") # id should not be changed
+
+    Date_label = tk.Label(update_expense_frame, text="Date(yyyy-mm-dd):" )
+    Date_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+    Date_entry = tk.Entry(update_expense_frame)
+    Date_entry.grid(row=1 , column=1)
+    Date_entry.insert(1,date)   # this line is what changes this  from ADD window  , as this gives already existing values
+
+    Amount_label = tk.Label(update_expense_frame, text="Amount:")
+    Amount_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
+    Amount_entry = tk.Entry(update_expense_frame)
+    Amount_entry.grid(row=2 , column=1)
+    Amount_entry.insert(2,amount)
+    
+    Category_label = tk.Label(update_expense_frame, text="Category:")
+    Category_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
+    Category_entry = tk.Entry(update_expense_frame)
+    Category_entry.grid(row=3 , column=1)
+    Category_entry.insert(3,category)
+
+    Description_label = tk.Label(update_expense_frame, text="Description:")
+    Description_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
+    Description_entry = tk.Entry(update_expense_frame)
+    Description_entry.grid(row=4 , column=1)
+    Description_entry.insert(4,description)
+
+    update_expense_frame.pack(padx=20, pady=20)
+
+    def save_expenses():
+        expense_id = ID_entry.get()
+        date = Date_entry.get()
+        amount = Amount_entry.get()
+        category = Category_entry.get()
+        description = Description_entry.get()
+
+        if not date or not amount or not category or not description:
+        # Show an error message and don't save
+            messagebox.showerror("Error","please fill all the records")
+            return
+            
+        try:
+            datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            messagebox.showerror(
+                "Invalid Date",
+                "Please enter the date in YYYY-MM-DD format."
+            )
+            return
+
+        logic.update_expense_gui(
+        expense_id,
+        date,
+        amount,
+        category,
+        description
+        )
+
+        
+
+        refresh_table()
+
+        update_window.destroy()
+
+    save_button = tk.Button(
+        update_window,
+        text="Save Expense",
+        command=save_expenses
+    )
+
+    save_button.pack( pady=10)
+
+
+
+    
+
 root = tk.Tk()
 
 root.title("Expense tracker")
@@ -137,7 +254,7 @@ feature_frame.pack(fill='x',padx=10,pady=10)
 add_button = tk.Button(feature_frame, text="ADD➕" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" , command=open_add_window )
 add_button.pack(side="left"  , padx=10 , pady=10 )
 
-Update_button = tk.Button(feature_frame, text="Update🖋️" , font=("helvetica",12,"bold" ) , bg="#90C0EF" , fg="white" )
+Update_button = tk.Button(feature_frame, text="Update🖋️" , font=("helvetica",12,"bold" ) , bg="#90C0EF" , fg="white" , command=update_selected_item )
 Update_button.pack(side="left" , padx=10 , pady=10 )
 
 delete_button = tk.Button(feature_frame, text="Delete🗑️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" , command=delete_selected_expense )

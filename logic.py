@@ -291,3 +291,25 @@ def delete_expense_gui(expense_id):
 
     cursor.execute(query, (expense_id,))
     conn.commit()
+
+def update_expense_gui(expense_id, date, amount, category, description):
+
+    query = """
+    UPDATE expenses
+    SET expense_date = %s,
+        amount = %s,
+        category = %s,
+        description = %s
+    WHERE id = %s
+    """
+
+    values = (
+        date,
+        amount,
+        category,
+        description,
+        expense_id
+    )
+
+    cursor.execute(query, values)
+    conn.commit()
