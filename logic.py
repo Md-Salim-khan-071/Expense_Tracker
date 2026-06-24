@@ -281,3 +281,13 @@ def add_expense_gui(date, amount, category, description):
     conn.commit()
 
     print("Expense added successfully!")
+
+def delete_expense_gui(expense_id):
+
+    query = """
+    DELETE FROM expenses
+    WHERE id = %s
+    """
+
+    cursor.execute(query, (expense_id,))
+    conn.commit()

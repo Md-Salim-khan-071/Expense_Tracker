@@ -63,6 +63,11 @@ def open_add_window():
         category = Category_entry.get()
         description = Description_entry.get()
 
+        if not date or not amount or not category:
+        # Show an error message and don't save
+            messagebox.showerror("Error","please fill all the records"
+        )
+
         logic.add_expense_gui(
         date,
         amount,
@@ -74,12 +79,6 @@ def open_add_window():
 
         add_window.destroy()
 
-        if not date or not amount or not category:
-        # Show an error message and don't save
-            messagebox.showerror("Error","please fill all the records"
-        )
-
-
     save_button = tk.Button(
         add_window,
         text="Save Expense",
@@ -89,7 +88,30 @@ def open_add_window():
     save_button.pack( pady=10)
 
 
+# function for deleting an expense 
+def delete_selected_expense():
+    selected_item = table.selection()
 
+    if not selected_item: #checks if user has selected an item . if any user didnt select an item and pressed delete an error should pop
+        messagebox.showerror(
+            "No Selection",
+            "Select a row before deleting"
+        )
+    
+    values = table.item(selected_item[0] , "values")  # selected_item[0] bcoz selected_item actually returns a tuple ("ex",)  but we want only "ex" . so we use selected_item[0] .
+    expense_id = values[0]
+    
+    #ask for confirmation to delete
+    confirm = messagebox.askyesno(
+        "Confirm delete",
+        "Are you sure! you want to  delete this  expense "
+    )
+    if not confirm:
+        return
+
+    logic.delete_expense_gui(expense_id)
+
+    refresh_table()
 
 root = tk.Tk()
 
@@ -118,7 +140,7 @@ add_button.pack(side="left"  , padx=10 , pady=10 )
 Update_button = tk.Button(feature_frame, text="Update🖋️" , font=("helvetica",12,"bold" ) , bg="#90C0EF" , fg="white" )
 Update_button.pack(side="left" , padx=10 , pady=10 )
 
-delete_button = tk.Button(feature_frame, text="Delete🗑️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" )
+delete_button = tk.Button(feature_frame, text="Delete🗑️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" , command=delete_selected_expense )
 delete_button.pack(side="left" , padx=10 , pady=10 )
 
 refresh_button = tk.Button(feature_frame, text="Refresh🔄️" , font=("helvetica",12,"bold") , bg="#90C0EF" , fg="white" , command=refresh_table )
@@ -181,17 +203,6 @@ style.configure(
     "Treeview.Heading",
     font=("Helvetica", 12, "bold")
 )
-
-# table.insert(
-#     "",
-#     "end",
-#     values=(1, "2026-06-22", 250, "Food", "Lunch")
-# )
-
-# rows = logic.get_all_expenses()
-# for row in rows:
-#     table.insert("", "end", values=row)
-
 
 
 
