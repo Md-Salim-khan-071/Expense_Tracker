@@ -267,3 +267,17 @@ def get_all_expenses():
     return rows
 
 
+
+def add_expense_gui(date, amount, category, description):
+
+    query = """
+    INSERT INTO expenses (expense_date, amount, category, description)
+    VALUES (%s, %s, %s, %s)
+    """
+
+    values = (date, amount, category, description)
+
+    cursor.execute(query, values)
+    conn.commit()
+
+    print("Expense added successfully!")

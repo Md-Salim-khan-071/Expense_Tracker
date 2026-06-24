@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 import mysql.connector
 # from logic import *
 import logic
@@ -17,6 +18,8 @@ def refresh_table():
     for row in rows:
         table.insert("","end",values=row)
 
+
+
 # function to open a new  windo when the ADD button is clicked 
 def open_add_window():
     add_window = tk.Toplevel(root)
@@ -24,32 +27,66 @@ def open_add_window():
     add_window.title("Add Expense" )
     add_window.geometry("400x300")
 
+    
+
     # the frame in which all the entries will be there . for a more modular look 
     add_expense_frame = tk.Frame(add_window)
     add_expense_frame.columnconfigure(0 , weight=1)
     add_expense_frame.columnconfigure(1 , weight=1)
 
-    date_label = tk.Label(add_expense_frame, text="Date(yyyy-mm-dd):" , font=("helvetica",12,"bold"),bg="#2C3E50",fg="white")
-    date_label.grid(row=0 , column=0)
-    date_entry = tk.Entry(add_expense_frame)
-    date_entry.grid(row=0 , column=1)
+    Date_label = tk.Label(add_expense_frame, text="Date(yyyy-mm-dd):" )
+    Date_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    Date_entry = tk.Entry(add_expense_frame)
+    Date_entry.grid(row=0 , column=1)
 
     Amount_label = tk.Label(add_expense_frame, text="Amount:")
-    Amount_label.grid(row=1 , column=0)
+    Amount_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
     Amount_entry = tk.Entry(add_expense_frame)
     Amount_entry.grid(row=1 , column=1)
 
     Category_label = tk.Label(add_expense_frame, text="Category:")
-    Category_label.grid(row=2 , column=0)
+    Category_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
     Category_entry = tk.Entry(add_expense_frame)
     Category_entry.grid(row=2 , column=1)
 
     Description_label = tk.Label(add_expense_frame, text="Description:")
-    Description_label.grid(row=3 , column=0)
+    Description_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
     Description_entry = tk.Entry(add_expense_frame)
     Description_entry.grid(row=3 , column=1)
 
     add_expense_frame.pack(padx=20, pady=20)
+
+    #function to save the expenses 
+    def save_expenses():
+        date = Date_entry.get()
+        amount = Amount_entry.get()
+        category = Category_entry.get()
+        description = Description_entry.get()
+
+        logic.add_expense_gui(
+        date,
+        amount,
+        category,
+        description
+        )
+
+        refresh_table()
+
+        add_window.destroy()
+
+        if not date or not amount or not category:
+        # Show an error message and don't save
+            messagebox.showerror("Error","please fill all the records"
+        )
+
+
+    save_button = tk.Button(
+        add_window,
+        text="Save Expense",
+        command=save_expenses
+    )
+
+    save_button.pack( pady=10)
 
 
 
